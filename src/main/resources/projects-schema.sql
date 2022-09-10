@@ -21,7 +21,7 @@ CREATE TABLE material (
 	num_required INT, 
 	cost DECIMAL(7, 2),
 	PRIMARY KEY (material_id),
-	FOREIGN KEY (project_id) REFERENCES project (project_id)
+	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE step (
@@ -30,7 +30,7 @@ CREATE TABLE step (
 	step_text TEXT NOT NULL,
 	step_order INT NOT NULL,
 	PRIMARY KEY (step_id),
-	FOREIGN KEY (project_id) REFERENCES project (project_id) 
+	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );
 
 CREATE TABLE category (
@@ -42,9 +42,16 @@ CREATE TABLE category (
 CREATE TABLE project_category (
 	project_id INT NOT NULL,
 	category_id INT NOT NULL,
-	FOREIGN KEY (project_id) REFERENCES project (project_id),
-	FOREIGN KEY (category_id) REFERENCES category (category_id),
+	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE,
+	FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE,
 	UNIQUE KEY (project_id, category_id)
 );
 
-
+-- Add some data
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes) 
+	VALUES ('Paint bedroom walls', 8, 6, 2, 'Buy blue paint and paint brushes');
+INSERT INTO material (project_id, material_name, num_required, cost)
+	VALUES (1, 'Blue paint', 3, 75);
+INSERT INTO step (project_id, step_text, step_order)
+ 	VALUES (1, 'Cover the floor with plastic drop cloth and secure with masking tape', 1);
+INSERT INTO category (category_name) VALUES ('Walls and Ceiling');
